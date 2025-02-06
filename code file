@@ -1,0 +1,152 @@
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+// Class representing a rental item (e.g., car, bike, etc.)
+class RentalItem {
+    private String id;
+    private String name;
+    private boolean isAvailable;
+
+    public RentalItem(String id, String name) {
+        this.id = id;
+        this.name = name;
+        this.isAvailable = true;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public boolean isAvailable() {
+        return isAvailable;
+    }
+
+    public void setAvailable(boolean available) {
+        isAvailable = available;
+    }
+}
+
+// Class representing a customer
+class Customer {
+    private String id;
+    private String name;
+
+    public Customer(String id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+}
+
+// Class representing a booking
+class Booking {
+    private String bookingId;
+    private RentalItem rentalItem;
+    private Customer customer;
+    private Date bookingDate;
+
+    public Booking(String bookingId, RentalItem rentalItem, Customer customer, Date bookingDate) {
+        this.bookingId = bookingId;
+        this.rentalItem = rentalItem;
+        this.customer = customer;
+        this.bookingDate = bookingDate;
+    }
+
+    public String getBookingId() {
+        return bookingId;
+    }
+
+    public RentalItem getRentalItem() {
+        return rentalItem;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public Date getBookingDate() {
+        return bookingDate;
+    }
+}
+
+// Class representing the rental system
+class RentalSystem {
+    private List<RentalItem> rentalItems;
+    private List<Booking> bookings;
+
+    public RentalSystem() {
+        this.rentalItems = new ArrayList<>();
+        this.bookings = new ArrayList<>();
+    }
+
+    public void addRentalItem(RentalItem item) {
+        rentalItems.add(item);
+    }
+
+    public void addBooking(Booking booking) {
+        bookings.add(booking);
+        booking.getRentalItem().setAvailable(false);
+    }
+
+    public void displayAvailableItems() {
+        System.out.println("Available Rental Items:");
+        for (RentalItem item : rentalItems) {
+            if (item.isAvailable()) {
+                System.out.println(item.getId() + " - " + item.getName());
+            }
+        }
+    }
+
+    public void displayBookings() {
+        System.out.println("Current Bookings:");
+        for (Booking booking : bookings) {
+            System.out.println("Booking ID: " + booking.getBookingId() +
+                    ", Item: " + booking.getRentalItem().getName() +
+                    ", Customer: " + booking.getCustomer().getName() +
+                    ", Date: " + booking.getBookingDate());
+        }
+    }
+}
+
+// Main class to test the rental booking system
+public class RentalBookingSystem {
+    public static void main(String[] args) {
+        // Create rental items
+        RentalItem car1 = new RentalItem("C001", "Toyota Corolla");
+        RentalItem car2 = new RentalItem("C002", "Honda Civic");
+
+        // Create customers
+        Customer customer1 = new Customer("CU001", "John Doe");
+        Customer customer2 = new Customer("CU002", "Jane Smith");
+
+        // Create rental system
+        RentalSystem rentalSystem = new RentalSystem();
+        rentalSystem.addRentalItem(car1);
+        rentalSystem.addRentalItem(car2);
+
+        // Display available items
+        rentalSystem.displayAvailableItems();
+
+        // Create bookings
+        Booking booking1 = new Booking("B001", car1, customer1, new Date());
+        rentalSystem.addBooking(booking1);
+
+        // Display available items after booking
+        rentalSystem.displayAvailableItems();
+
+        // Display all bookings
+        rentalSystem.displayBookings();
+    }
+}
